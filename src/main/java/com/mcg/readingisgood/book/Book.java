@@ -1,17 +1,23 @@
 package com.mcg.readingisgood.book;
 
+import com.mcg.readingisgood.audit.Auditable;
+import com.mcg.readingisgood.order.Order;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @Document(collection = "books")
-public class Book {
+@NoArgsConstructor
+public class Book extends Auditable {
 
     @Id
     private String id;
@@ -30,4 +36,7 @@ public class Book {
     @NotNull(message = "Price cannot be null!")
     @Min(value = 0, message = "Price is not valid!")
     private Double price;
+
+    @DBRef(lazy = true)
+    private List<Order> orders;
 }

@@ -5,6 +5,7 @@ import com.mcg.readingisgood.exception.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,13 +14,15 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public Book addBook(Book book) {
+    public Book saveBook(Book book) {
         return bookRepository.save(book);
     }
 
-    public Book updateBookStock(BookStockDTO bookStockDTO) {
-        Book book = bookRepository.findById(bookStockDTO.getId()).orElseThrow(() -> new AppException("Book id is not found!"));
-        book.setStock(bookStockDTO.getStock());
-        return bookRepository.save(book);
+    public void updateBookStock(BookStockDTO bookStockDTO) {
+        bookRepository.updateBookStock(bookStockDTO.getId(), bookStockDTO.getStock());
+    }
+
+    public Optional<Book> findById(String id) {
+        return bookRepository.findById(id);
     }
 }

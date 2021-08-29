@@ -2,6 +2,8 @@ package com.mcg.readingisgood.book;
 
 import com.mcg.readingisgood.dto.BookStockDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,12 +17,13 @@ public class BookController {
 
     @PostMapping
     public Book save(@Valid @RequestBody Book book) {
-        return bookService.addBook(book);
+        return bookService.saveBook(book);
     }
 
     @PutMapping
-    public Book updateBookStock(@Valid @RequestBody BookStockDTO bookStockDTO) {
-        return bookService.updateBookStock(bookStockDTO);
+    public ResponseEntity<?> updateBookStock(@Valid @RequestBody BookStockDTO bookStockDTO) {
+        bookService.updateBookStock(bookStockDTO);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
 }
