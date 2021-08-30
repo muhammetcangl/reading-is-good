@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,7 +22,11 @@ public class Customer extends Auditable {
 
     @Id
     private String id;
+
+    @NotBlank(message = "Customer name cannot be empty!")
     private String name;
+
+    @NotBlank(message = "Username cannot be empty!")
     private String username;
 
     public Customer(String name, String username, String password) {
@@ -31,6 +36,7 @@ public class Customer extends Auditable {
     }
 
     @JsonIgnore
+    @NotBlank(message = "Password cannot be empty!")
     private String password;
 
     @DBRef
