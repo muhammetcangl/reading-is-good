@@ -1,8 +1,8 @@
-package com.mcg.readingisgood.auth;
+package com.mcg.readingisgood.customer;
 
-import com.mcg.readingisgood.customer.Customer;
-import com.mcg.readingisgood.customer.CustomerRepository;
-import com.mcg.readingisgood.exception.AppException;
+import com.mcg.readingisgood.auth.JwtAuthenticationResponse;
+import com.mcg.readingisgood.auth.LoginRequest;
+import com.mcg.readingisgood.auth.SignUpRequest;
 import com.mcg.readingisgood.payload.ApiResponse;
 import com.mcg.readingisgood.role.Role;
 import com.mcg.readingisgood.role.RoleName;
@@ -16,20 +16,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collections;
 
-@RestController
-@RequestMapping("/auth")
+@Service
 @RequiredArgsConstructor
-public class AuthController {
+public class CustomerService {
 
     private final AuthenticationManager authenticationManager;
     private final CustomerRepository customerRepository;
@@ -37,9 +32,7 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
 
-
-    @PostMapping("/signIn")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -53,8 +46,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
-    @PostMapping("/signUp")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> registerCustomer(SignUpRequest signUpRequest) {
 
         if (customerRepository.existsByUsername(signUpRequest.getUsername())) {
             return new ResponseEntity<>(new ApiResponse(false, "Bu kullanıcı adı zaten kullanılıyor."),
@@ -66,7 +58,7 @@ public class AuthController {
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
-        Role customerRole = roleRepository.findByName(RoleName.USER).orElseThrow(() -> new RuntimeException());
+        Role customerRole = roleRepository.findByName(RoleName.USER).orElseThrow(RuntimeException::new);
 
         customer.setRoles(Collections.singleton(customerRole));
 
@@ -74,10 +66,9 @@ public class AuthController {
 
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentContextPath().path("/api/users/{username}")
+                .fromCurrentContextPath().path("/customer/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true, "Customer registered successfully"));
     }
-
 }

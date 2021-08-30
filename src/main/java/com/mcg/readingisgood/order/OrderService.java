@@ -29,17 +29,21 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final BookRepository bookRepository;
-    private final MongoTemplate mongoTemplate;
 
     //@Transactional(value = "mongoTransactionManager", propagation = Propagation.REQUIRED)
-    //@Retryable(value = {MongoCommandException.class, MongoException.class}, exclude = {MongoTransactionException.class, UncategorizedMongoDbException.class},
-    //        backoff = @Backoff(delay = 10), maxAttempts = 10)
+    @Retryable(value = {MongoCommandException.class, MongoException.class}, exclude = {MongoTransactionException.class, UncategorizedMongoDbException.class},
+            backoff = @Backoff(delay = 10), maxAttempts = 10)
     public Order save(Order order) {
 
-        order.getBooks().forEach(book -> {
-            Book orderedBook = bookRepository.findById(book.getId()).orElseThrow(() -> new AppException("Book not found!"));
-            bookRepository.updateBookStock(book.getId(), orderedBook.getStock() - 1); //todo: check stock
-        });
+        if (order.getBooks() != null) {
+
+            order.getBooks().forEach(book -> {
+                Book orderedBook = bookRepository.findById(book.getId()).orElseThrow(() -> new AppException("Book not found!"));
+                bookRepository.updateBookStock(book.getId(), orderedBook.getStock() - 1); //todo: check stock
+            });
+        } else {
+            throw new AppException("Orders should have book(s) !");
+        }
 
         return orderRepository.save(order);
     }

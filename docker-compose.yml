@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  mongo_db:
+    image: "mongo:5.0.2"
+    command: mongod --port 27018
+    restart: always
+    ports:
+      - 27018:27018
+    expose:
+      - 27018
+  reading-is-good:
+    image: muhammetcangl/reading-is-good:latest
+    container_name: reading_is_good
+    restart: on-failure
+    ports:
+      - 8080:8080
+    environment:
+      - spring.profiles.active=prod
+    networks:
+      - readingIsGood
+    depends_on:
+      - mongo_db
+networks:
+  readingIsGood:
+    name: readingIsGoodNetwork

@@ -1,30 +1,41 @@
-# Read Me First
+# Reading Is Good
 The following was discovered as part of building this project:
 
-* The original package name 'com.mcg.reading-is-good' is invalid and this project uses 'com.mcg.readingisgood' instead.
+* ReadingIsGood is an online books retail firm which operates only on the Internet. Main
+  target of ReadingIsGood is to deliver books from its one centralized warehouse to their
+  customers within the same day. That is why stock consistency is the first priority for their
+  vision operations.
 
-# Getting Started
+## Tech Stack
 
-### Reference Documentation
-For further reference, please consider the following sections:
+- Spring Boot
+- Spring Security
+- Spring Data
+- Spring Validation
+- Spring Retry
+- MongoDB
+- Lombok
+- Swagger2
+- JJWT
+- MapStruct
+- JUnit
+- Mockito
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.5.4/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.5.4/maven-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#boot-features-developing-web-applications)
-* [Spring Data MongoDB](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#boot-features-mongodb)
-* [Spring Data JPA](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#boot-features-jpa-and-spring-data)
-* [Spring Security](https://docs.spring.io/spring-boot/docs/2.5.4/reference/htmlsingle/#boot-features-security)
+## How to run?
 
-### Guides
-The following guides illustrate how to use some features concretely:
+1) RUN ON LOCAL
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-* [Accessing Data with MongoDB](https://spring.io/guides/gs/accessing-data-mongodb/)
-* [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
-* [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
-* [Spring Boot and OAuth2](https://spring.io/guides/tutorials/spring-boot-oauth2/)
-* [Authenticating a User with LDAP](https://spring.io/guides/gs/authenticating-ldap/)
+If you want to run project on local, you need to clone project. After this you need to install `mongodb` on your local machine.
 
+2) RUN DOCKER IMAGE
+
+`docker-compose up`.
+
+**SWAGGER - POSTMAN** <br>
+SWAGGER URL:`http://localhost:8080/swagger-ui.html` <br> 
+POSTMAN COLLECTION: `${PROJECT_DIR}\ReadingIsGood.postman_collection.json`
+
+## How to use?
+**Default Account Informations** <br>
+Username = admin <br>
+Password = admin123 <br>

@@ -3,6 +3,8 @@ package com.mcg.readingisgood.order;
 import com.mcg.readingisgood.audit.Auditable;
 import com.mcg.readingisgood.book.Book;
 import com.mcg.readingisgood.customer.Customer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -15,6 +17,8 @@ import java.util.List;
 @Data
 @Document(collection = "orders")
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order extends Auditable {
 
     @Id

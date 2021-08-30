@@ -19,10 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -36,12 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomCustomerService customCustomerService;
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
-
-    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-            new AntPathRequestMatcher("/public/**")
-    );
-
-    private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -68,15 +58,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+        web.ignoring().mvcMatchers(HttpMethod.OPTIONS, "/**");
         web.ignoring().antMatchers(
-                "/signIn","/signUp","/h2/**",
+                "/signIn", "/signUp",
                 "/v2/api-docs",
                 "/configuration/ui",
                 "/swagger-resources/**",
                 "/configuration/security",
                 "/swagger-ui.html",
                 "/webjars/**");
-        web.ignoring().requestMatchers(PUBLIC_URLS);
     }
 
     @Override
@@ -103,9 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js")
                 .permitAll()
-                .antMatchers("/auth/**")
-                .permitAll()
-                .antMatchers(HttpMethod.GET, "/users/**")
+                .antMatchers("/customers/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
